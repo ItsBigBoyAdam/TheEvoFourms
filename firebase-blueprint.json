@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Forum post",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "authorId", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Reply to a post",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "content", "authorId", "createdAt"]
+    },
+    "Like": {
+      "title": "Like",
+      "description": "User like on a post",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "postId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "postId"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "User report on a post or comment",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string" },
+        "targetId": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["post", "comment"] },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "dismissed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reporterId", "targetId", "targetType", "reason", "createdAt"]
+    },
+    "Follow": {
+      "title": "Follow",
+      "description": "User follow relationship",
+      "type": "object",
+      "properties": {
+        "followerId": { "type": "string" },
+        "followingId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["followerId", "followingId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/posts/{postId}": { "schema": "Post", "description": "Forum posts" },
+    "/posts/{postId}/comments/{commentId}": { "schema": "Comment", "description": "Post comments" },
+    "/likes/{likeId}": { "schema": "Like", "description": "Post likes" },
+    "/reports/{reportId}": { "schema": "Report", "description": "User reports" },
+    "/follows/{followId}": { "schema": "Follow", "description": "User follows" }
+  }
+}
